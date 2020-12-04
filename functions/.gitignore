@@ -78,3 +78,6 @@ typings/
 
 #service account credentials
 service_account.json
+
+#lock files
+*.lock
