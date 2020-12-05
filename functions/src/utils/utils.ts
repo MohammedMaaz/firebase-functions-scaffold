@@ -127,3 +127,18 @@ export const isValidNum = (value) => {
 };
 
 export const capitalize = (str) => str[0].toUpperCase() + str.slice(1);
+
+export function jsonToQueryString(json) {
+  const keys = Object.keys(json || {});
+
+  if (keys.length)
+    return (
+      "?" +
+      keys
+        .map(function (key) {
+          return encodeURIComponent(key) + "=" + encodeURIComponent(json[key]);
+        })
+        .join("&")
+    );
+  else return "";
+}

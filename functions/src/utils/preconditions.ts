@@ -2,6 +2,7 @@
 import { callable_error } from "./cf";
 import Geo from "../geolocation";
 import { uidFromProfile, uidFromPrivate } from "./utils";
+import { functions } from "./firebase_config";
 
 export const verifyAuthentication = (context) => {
   if (!context.auth)
@@ -70,4 +71,9 @@ export const verifyValidRating = (rating) => {
 export const verifyValidPhoneNumber = (phoneNumber) => {
   const pattern = /^((\+92)|(0092))-{0,1}3{1}\d{2}-{0,1}\d{7}$|^0{0,1}3{1}\d{10}$|^0{0,1}3{1}\d{2}-\d{7}$/g;
   if (!pattern.test(phoneNumber)) throw `invalid phoneNumber:${phoneNumber}`;
+};
+
+export const verifyAPIKey = (apiKey) => {
+  if (apiKey !== functions.config().https.api_key)
+    throw "invalid api key provided!";
 };

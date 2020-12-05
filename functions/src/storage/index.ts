@@ -1,5 +1,5 @@
 //@ts-nocheck
-import { admin, storage, db, refs } from "../utils/firebase_config";
+import { admin, storage, db, refs, functions } from "../utils/firebase_config";
 import {
   randHashString,
   fileNameWithoutExtension,
@@ -10,7 +10,7 @@ import { changeTaskStatus } from "../utils/cf";
 const bucket = storage().bucket();
 
 const paramsToUrl = (filePath, token) => {
-  const BUCKET_NAME = `${process.env.project_id}.appspot.com`;
+  const BUCKET_NAME = `${functions.config().project.id}.appspot.com`;
   return (
     "https://firebasestorage.googleapis.com/v0/b/" +
     BUCKET_NAME +
