@@ -67,7 +67,7 @@ node_modules/
 env.json
 
 # Compiled JavaScript files
-lib/*.js
+lib/
 **/*.js.map
 
 # Except the ESLint config file
