@@ -344,21 +344,28 @@ export const withSuperAdmin = (
 
 export const withHTTPS = (
   task,
-  opts = { apiKey = null, allowCors = true },
+  {
+    apiKey = process.env.mode === "shell"
+      ? functions.config().https.api_key
+      : null,
+    allowCors = true,
+  },
   taskName = ""
 ) => {
   return async (...args) => {
     let first, rest, req, res;
     try {
-      req = args[1];
-      res = args[2];
-      verifyAPIKey(opts.apiKey || req.get("X-api-key"));
+      let realArgs = args;
+      if (args[0] && args[0].__type === "config") realArgs = args.slice(1);
+      req = realArgs[0];
+      res = realArgs[1];
+      verifyAPIKey(apiKey || req.get("X-api-key"));
 
       [first, rest] = getTaskArgs(args, {
-        https: { params: req.params, data: req.body },
+        https: { headers: req.headers, query: req.query, data: req.body },
       });
       try {
-        if (opts.allowCors) res.append("Access-Control-Allow-Origin", ["*"]);
+        if (allowCors) res.append("Access-Control-Allow-Origin", ["*"]);
 
         const response = await task(first, ...rest);
         if (!res.finished) res.json(response || null);

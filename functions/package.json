@@ -1,12 +1,13 @@
 {
   "name": "functions",
   "scripts": {
-    "init": "node ./scripts/init.js",
+    "init": "node ./node_scripts/init.js",
     "get-config": "firebase functions:config:get",
     "build": "tsc",
     "watch": "tsc -w",
     "serve": "npm run build && cross-env GOOGLE_APPLICATION_CREDENTIALS=./service_account.json firebase emulators:start --only functions",
-    "shell": "npm run build && cross-env GOOGLE_APPLICATION_CREDENTIALS=./service_account.json firebase functions:shell",
+    "_shell": "npm run build && cross-env GOOGLE_APPLICATION_CREDENTIALS=./service_account.json firebase functions:shell",
+    "shell": "node ./node_scripts/shell.js",
     "start": "npm run shell",
     "deploy": "npm run init && npm run build && firebase deploy --only functions",
     "logs": "firebase functions:log",

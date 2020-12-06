@@ -1,4 +1,5 @@
 fs = require("fs").promises;
+const { execSync } = require("child_process");
 const config = require("../env.json");
 const setConfig = require("./setConfig");
 
@@ -16,12 +17,13 @@ async function createFirebaserc() {
     await fs.readFile(path, method);
   } catch (error) {
     if (error instanceof Error && error.code === "ENOENT") {
-      await fs.writeFile(path, JSON.stringify(fileJson, null, 4), method);
+      await fs.writeFile(path, JSON.stringify(fileJson, null, 2), method);
     } else throw error;
   }
 }
 
 (async function () {
   await createFirebaserc();
-  await setConfig();
+  execSync("firebase use default", { stdio: "inherit" });
+  setConfig();
 })();

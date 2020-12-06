@@ -33,7 +33,7 @@ const create_queue = async (name) => {
 const add = async ({
   queueName,
   endPoint = { isCloudFunction: true, functionName: "", url: null },
-  payload = {},
+  body = {},
   queryParams,
   runsAt, //milliseconds from epoch or Date Object
   maxRetries = 5,
@@ -69,13 +69,13 @@ const add = async ({
   };
 
   if (httpMethod === "POST")
-    task.body = Buffer.from(
+    task.httpRequest.body = Buffer.from(
       JSON.stringify({
-        taskPayload: {
-          meta_scheduled_at: runsAt,
-          meta_task_created_at: Date.now(),
-          ...payload,
+        task_metadata: {
+          scheduled_at: runsAt,
+          task_created_at: Date.now(),
         },
+        ...body,
       })
     ).toString("base64");
 
@@ -86,12 +86,13 @@ const add = async ({
     );
     return response.name;
   } catch (e) {
-    if (e.code === 13 && createQueueIfNotExists && createQueueRetries > 0) {
+    if (e.code === 9 && createQueueIfNotExists && createQueueRetries > 0) {
+      console.log("creating queue...");
       await create_queue(queueName);
       await add({
         queueName,
         endPoint,
-        payload,
+        body,
         queryParams,
         runsAt,
         maxRetries,
