@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { functions } from "../utils/firebase_config";
-import { jsonToQueryString } from "../utils/utils";
+import { getCFUrl, jsonToQueryString } from "../utils/utils";
 const { CloudTasksClient } = require("@google-cloud/tasks");
 
 //to create a new queue enter in cli:
@@ -33,7 +33,7 @@ const create_queue = async (name) => {
 const add = async ({
   queueName,
   endPoint = { isCloudFunction: true, functionName: "", url: null },
-  body = {},
+  body = null,
   queryParams,
   runsAt, //milliseconds from epoch or Date Object
   maxRetries = 5,
@@ -50,8 +50,7 @@ const add = async ({
   const queuePath = client.queuePath(projectId, location, queue);
 
   let url;
-  if (endPoint.isCloudFunction)
-    url = `https://${location}-${projectId}.cloudfunctions.net/${endPoint.functionName}`;
+  if (endPoint.isCloudFunction) url = getCFUrl(endPoint.functionName);
   else url = endPoint.url;
 
   const task = {
@@ -68,16 +67,18 @@ const add = async ({
     },
   };
 
-  if (httpMethod === "POST")
-    task.httpRequest.body = Buffer.from(
-      JSON.stringify({
+  if (body && ["POST", "PUT", "PATCH"].includes(httpMethod)) {
+    if (typeof body === "object")
+      body = JSON.stringify({
         task_metadata: {
           scheduled_at: runsAt,
           task_created_at: Date.now(),
         },
         ...body,
-      })
-    ).toString("base64");
+      });
+    task.httpRequest.body = Buffer.from(body).toString("base64");
+  }
+
 
   try {
     const [response] = await client.createTask(

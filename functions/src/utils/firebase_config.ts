@@ -23,11 +23,14 @@ if (process.env.mode === "shell") {
 const users = db().collection("users");
 
 const config = db().collection("config");
+
+const test = db().collection("test");
 /*****************************************/
 
 export const refs = {
   users,
   config,
+  test,
 };
 
 export const currUser = () => ({

@@ -1,5 +1,6 @@
 //@ts-nocheck
 import * as promiseRetry from "promise-retry";
+import { functions } from "./firebase_config";
 
 export const docToData = (doc) =>
   doc.exists ? { id: doc.id, _original: doc, ...doc.data() } : null;
@@ -141,4 +142,10 @@ export function jsonToQueryString(json) {
         .join("&")
     );
   else return "";
+}
+
+export function getCFUrl(cfName) {
+  return `https://${
+    functions.config().project.cf_region || functions.config().project.region
+  }-${functions.config().project.id}.cloudfunctions.net/${cfName}`;
 }

@@ -73,7 +73,10 @@ export const verifyValidPhoneNumber = (phoneNumber) => {
   if (!pattern.test(phoneNumber)) throw `invalid phoneNumber:${phoneNumber}`;
 };
 
-export const verifyAPIKey = (apiKey) => {
-  if (apiKey !== functions.config().https.api_key)
-    throw "invalid api key provided!";
+export const verifyAPIKey = (
+  provided,
+  reqd = functions.config().https.api_key
+) => {
+  if (!reqd) reqd = functions.config().https.api_key;
+  if (provided !== reqd) throw "invalid api key provided!";
 };
