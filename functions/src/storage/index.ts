@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { admin, storage, db, refs, functions } from "../utils/firebase_config";
 import {
-  randHashString,
+  randomHashString,
   fileNameWithoutExtension,
   reduceToArea,
   dynamicImport,
@@ -24,7 +24,7 @@ const paramsToUrl = (filePath, token) => {
 const getDownloadUrl = async (filePath) => {
   try {
     const file = bucket.file(filePath);
-    const uuid = randHashString(24);
+    const uuid = randomHashString(24);
     await file.setMetadata({
       metadata: {
         firebaseStorageDownloadTokens: uuid,
@@ -38,7 +38,7 @@ const getDownloadUrl = async (filePath) => {
 
 const uploadFile = async (fileLoc, destination) => {
   try {
-    const uuid = randHashString(24);
+    const uuid = randomHashString(24);
     const data = await bucket.upload(fileLoc, {
       destination,
       metadata: {

@@ -23,7 +23,18 @@ async function createFirebaserc() {
 }
 
 (async function () {
+  console.log("\n1. Creating .firebaserc file\n");
   await createFirebaserc();
+
+  console.log("\n2. Installing firebase-tools globally\n");
+  execSync("yarn global add firebase-tools", { stdio: "inherit" });
+
+  console.log("\n3. Logging in to firebase\n");
+  execSync("firebase login", { stdio: "inherit" });
+
+  console.log("\n4. Use firebase default project\n");
   execSync("firebase use default", { stdio: "inherit" });
+
+  console.log("\n5. Set config define by env.json\n");
   setConfig();
 })();
