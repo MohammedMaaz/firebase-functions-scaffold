@@ -11,13 +11,27 @@ export const querySnapToData = (snap) => {
   return { docs, _original: snap };
 };
 
-export const randHashString = (len) => {
+export const randomInt = (min, max) =>
+  Math.floor(Math.random() * (max - min + 1)) + min;
+
+export const randomFloat = (min, max) => Math.random() * (max - min) + min;
+
+export const randomHashString = (len) => {
   return "x".repeat(len).replace(/[xy]/g, (c) => {
     let r = (Math.random() * 16) | 0,
       v = c == "x" ? r : (r & 0x3) | 0x8;
     return v.toString(16);
   });
 };
+
+export const randomString = (len) =>
+  [...Array(len)].map(() => Math.random().toString(36)[2]).join("");
+
+export function randomDate(d1, d2) {
+  if (d1 instanceof Date) d1 = d1.getTime();
+  if (d2 instanceof Date) d2 = d2.getTime();
+  return new Date(randomInt(d1, d2));
+}
 
 export const removeKeys = (obj, keys) => {
   let newObj = Object.assign({}, obj);
@@ -106,9 +120,6 @@ export const chunk = (arr, chunkSize) => {
   return chunks;
 };
 
-export const randomInt = (min, max) =>
-  Math.floor(Math.random() * (max - min + 1)) + min;
-
 export const uidFromProfile = (profile) =>
   profile._original.ref.parent.parent.id;
 export const uidFromPrivate = (_private) =>
@@ -148,4 +159,18 @@ export function getCFUrl(cfName) {
   return `https://${
     functions.config().project.cf_region || functions.config().project.region
   }-${functions.config().project.id}.cloudfunctions.net/${cfName}`;
+}
+
+export async function PromiseAll(promises, batchSize = 20) {
+  if (!batchSize || !Number.isInteger(batchSize) || batchSize <= 0)
+    return Promise.all(promises);
+
+  let position = 0;
+  let results = [];
+  while (position < promises.length) {
+    const batch = promises.slice(position, position + batchSize);
+    results = [...results, ...(await Promise.all(batch))];
+    position += batchSize;
+  }
+  return results;
 }

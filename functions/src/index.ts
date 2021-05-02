@@ -8,14 +8,12 @@ import test from "./test";
 import Script from "./script";
 
 export const helloWorld = functions.https.onRequest(
-  withHTTPS(async (config) => {
-    console.log("hi");
-    return config;
+  withHTTPS(async () => {
+    console.log("Hello World!");
+    return "Hello World";
   }, {})
 );
 
-export const setGlobalConfig = functions.https.onRequest(
-  Script.set_global_config
-);
+export const runScript = functions.https.onRequest(Script.run);
 
 export const testFunction = functions.https.onRequest(test);

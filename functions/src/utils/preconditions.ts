@@ -17,11 +17,11 @@ export const verifyDocExists = (firebaseDoc) => {
     );
 };
 
-export const verifyDocNotExists = (doc) => {
-  if (doc)
+export const verifyDocNotExists = (firebaseDoc) => {
+  if (firebaseDoc.exists)
     throw callable_error(
       "already-exists",
-      `doc:${doc._original.ref.path} already exists`
+      `doc:${firebaseDoc?.ref?.path} already exists`
     );
 };
 
