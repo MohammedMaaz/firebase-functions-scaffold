@@ -1,6 +1,6 @@
 # firebase-functions-scaffold
 
-A starter-kit for writing firebase cloud functions using documented best practices
+A starter-kit for writing firebase cloud functions using documented best practices and built-in general use-case modules
 
 ## Features:
 * Cloud Tasks Module (for scheduling one-off tasks)
