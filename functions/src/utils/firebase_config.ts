@@ -11,12 +11,12 @@ export let functions = funcs;
 export const rtdb = firebase.database;
 
 if (process.env.mode === "shell") {
-  functions = {
-    ...funcs,
-    config() {
-      return env;
+  functions = Object.create(funcs);
+  Object.defineProperty(functions, "config", {
+    get() {
+      return () => env;
     },
-  };
+  });
 }
 
 /****************** refs ******************/
