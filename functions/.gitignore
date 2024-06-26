@@ -78,7 +78,9 @@ lib/
 typings/
 
 #service account credentials
-service_account.json
+service-account.json
+*service-account.json
 
-#lock files
-*.lock
+GTS_CA_1C3_dev.cer
+functions/lib/test/GTS_CA_1C3_dev.cer
+functions/src/test/GTS_CA_1C3_dev.cer

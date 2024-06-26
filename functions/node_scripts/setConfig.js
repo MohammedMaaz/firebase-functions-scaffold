@@ -1,5 +1,5 @@
 const { execSync } = require("child_process");
-const json = require("../env.json");
+const json = require("../.runtimeconfig.json");
 
 function getConfigCommand(obj, prefix = "", command = "", level = 1) {
   for (let [key, val] of Object.entries(obj)) {
@@ -12,6 +12,6 @@ function getConfigCommand(obj, prefix = "", command = "", level = 1) {
   return command;
 }
 
-module.exports = function () {
+void (() => {
   execSync(getConfigCommand(json), { stdio: "inherit" });
-};
+})();

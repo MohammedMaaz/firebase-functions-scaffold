@@ -9,6 +9,7 @@
     "strict": false,
     "target": "es2017",
     "allowJs": true,
+    "skipLibCheck": true,
     "typeRoots": ["node_modules/@types"]
   },
   "include": ["src"]

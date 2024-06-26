@@ -1,22 +1,26 @@
 {
   "name": "functions",
   "scripts": {
-    "init": "node ./node_scripts/init.js",
-    "get-config": "firebase functions:config:get",
+    "get-config:dev": "firebase use dev && firebase functions:config:get > .runtimeconfig.json",
+    "get-config:prod": "firebase use prod && firebase functions:config:get > .runtimeconfig.json",
+    "set-config:dev": "firebase use dev && node ./node_scripts/setConfig.js",
+    "set-config:prod": "firebase use prod && node ./node_scripts/setConfig.js",
     "build": "tsc",
     "watch": "tsc -w",
-    "set-env": "cross-env GOOGLE_APPLICATION_CREDENTIALS=./service_account.json",
-    "serve": "npm run build && npm run set-env firebase emulators:start --only functions",
-    "_shell": "npm run build && npm run set-env firebase functions:shell",
-    "shell": "node ./node_scripts/shell.js",
-    "start": "npm run shell",
-    "deploy": "npm run init && npm run build && npm run set-env && firebase deploy --only functions",
-    "deploy-only": "npm run init && npm run build && npm run set-env && firebase deploy --only functions:%npm_config_functions%",
+    "set-env:dev": "cross-env GOOGLE_APPLICATION_CREDENTIALS=./dev-service-account.json",
+    "set-env:prod": "cross-env GOOGLE_APPLICATION_CREDENTIALS=./prod-service-account.json",
+    "start:dev": "node ./node_scripts/shell.js dev",
+    "start:prod": "node ./node_scripts/shell.js prod",
+    "emulator:dev": "node ./node_scripts/emulator.js dev",
+    "emulator:prod": "node ./node_scripts/emulator.js prod",
+    "deploy:dev": "firebase use dev && npm run build && npm run set-config:dev && firebase deploy --only functions",
+    "deploy:prod": "firebase use prod && npm run build && npm run set-config:prod && firebase deploy --only functions",
     "logs": "firebase functions:log",
-    "drop-collection": "firebase firestore:delete --recursive %npm_config_collection%"
+    "drop-collection": "firebase firestore:delete --recursive %npm_config_collection%",
+    "get-firebase-cli-token": "firebase login:ci"
   },
   "engines": {
-    "node": "12"
+    "node": "16"
   },
   "main": "lib/index.js",
   "dependencies": {
@@ -27,17 +31,19 @@
     "fs-extra": "^9.0.0",
     "lodash.get": "^4.4.2",
     "lodash.set": "^4.3.2",
+    "moment": "^2.29.1",
     "ngeohash": "^0.6.3",
     "node-fetch": "^2.6.0",
     "os": "^0.1.1",
     "path": "^0.12.7",
-    "promise-retry": "^1.1.1",
-    "sharp": "^0.25.3"
+    "promise-retry": "^1.1.1"
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
     "firebase-functions-test": "^0.2.0",
-    "typescript": "^3.8.0"
+    "typescript": "^4.8.4"
   },
-  "private": true
+  "private": true,
+  "version": "1.0.0",
+  "license": "MIT"
 }

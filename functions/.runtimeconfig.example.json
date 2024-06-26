@@ -1,0 +1,9 @@
+{
+  "project": {
+    "region": "your-cf-region",
+    "id": "your-project-id"
+  },
+  "https": {
+    "api_key": "any-secret-key"
+  }
+}

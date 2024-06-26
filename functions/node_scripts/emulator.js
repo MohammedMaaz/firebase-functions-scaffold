@@ -4,7 +4,7 @@ void (function () {
   const env = process.argv[2];
 
   spawn(
-    `firebase use ${env} && npm run build && npm run set-env:${env} && firebase functions:shell`,
+    `firebase use ${env} && npm run build && npm run set-env:${env} && firebase emulators:start --only functions`,
     {
       stdio: "inherit",
       env: { ...process.env, mode: "shell" },
